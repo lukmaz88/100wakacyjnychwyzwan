@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Wakacyjnych Wyzwań 2025 - Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="80" r="2" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="3" fill="white" opacity="0.15"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(50px, 50px) rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-family: 'Caveat', cursive;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Progress bar */
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            height: 30px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .progress-bar {
+            background: white;
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* Controls */
+        .controls {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .filter-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* Challenges grid */
+        .challenges-container {
+            padding: 40px;
+        }
+        
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .challenge-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .challenge-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+        }
+        
+        .challenge-item.completed {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .challenge-item.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .challenge-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .challenge-text {
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .challenge-date {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        /* Animations */
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            animation: confetti 3s ease-out;
+            z-index: 1000;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>100 Wakacyjnych Wyzwań</h1>
+            <p class="subtitle">Tracker Postępów - Lato 2025</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number" id="completed-count">0</span>
+                    <span class="stat-label">Ukończone</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="remaining-count">100</span>
+                    <span class="stat-label">Pozostałe</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="percent-complete">0%</span>
+                    <span class="stat-label">Postęp</span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                    <span id="progress-text">0/100</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" id="search" placeholder="Szukaj wyzwania...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Wszystkie</button>
+                <button class="filter-btn" data-filter="completed">Ukończone</button>
+                <button class="filter-btn" data-filter="remaining">Pozostałe</button>
+            </div>
+        </div>
+        
+        <!-- Challenges -->
+        <div class="challenges-container">
+            <div class="challenges-grid" id="challenges-grid">
+                <!-- Challenges will be generated here -->
+            </div>
+        </div>
+        
+        <!-- Action buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="exportData()">📥 Eksportuj postępy</button>
+            <button class="btn btn-secondary" onclick="importData()">📤 Importuj postępy</button>
+            <button class="btn btn-danger" onclick="showResetModal()">🔄 Resetuj wszystko</button>
+        </div>
+    </div>
+    
+    <!-- Reset Modal -->
+    <div class="modal" id="reset-modal">
+        <div class="modal-content">
+            <h2>Czy na pewno chcesz zresetować postępy?</h2>
+            <p>Ta akcja usunie wszystkie zapisane postępy. Nie można jej cofnąć!</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Anuluj</button>
+                <button class="btn btn-danger" onclick="resetProgress()">Resetuj</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import file input (hidden) -->
+    <input type="file" id="import-input" accept=".json" style="display: none;">
+    
+    <script>
+        // Lista wyzwań
+        const challenges = [
+            "Wymyślcie kod językowy, którym będziecie się porozumiewać przez cały dzień",
+            "Gotujcie razem najdziwniejsze danie z tego, co jest w kuchni",
+            "Zróbcie domowe spa, ale tylko z błotem, ogórkiem, miodem, albo czymś obrzydliwie naturalnym",
+            "Spędźcie cały dzień na dachu, jak to możliwe",
+            "Zorganizujcie kąpiel w błocie lub glinie",
+            "Wykonajcie ekstremalny tor przeszkód w podwórku",
+            "Nagrajcie dziki filmik, jak robicie najbardziej hardcore wakacyjną zabawę",
+            "Wykonajcie wspólną medytację na świeżym powietrzu",
+            "Zorganizujcie nocne łowy z latarkami",
+            "Zróbcie wyzwanie cały dzień bez siedzenia, czyli na stojąco",
+            "Zorganizujcie konkurs na najdzikszy wakacyjny makijaż",
+            "Spędźcie noc pod gołym niebem i się przyglądajcie gwiazdom. Opisujcie je",
+            "Narysujcie własne portrety",
+            "Bitwa na balony z wodą",
+            "Opalać się cały dzień",
+            "Maraton filmowy",
+            "Maraton książkowy",
+            "Cały dzień w jednym kolorze",
+            "24 godziny bez telefonu",
+            "Noc w namiocie",
+            "10 kilometrów na rowerze",
+            "25 tysięcy kroków",
+            "Cały dzień w basenie",
+            "Zjedz 10 lodów w jeden dzień",
+            "Źle odpowiesz – wpadasz do basenu",
+            "Zobaczyć wschód słońca",
+            "Zobaczyć zachód słońca",
+            "Pójść na wspinaczkę",
+            "Zbudować własną bazę",
+            "Zrobić ognisko",
+            "Zrobić nockę w zbudowanej bazie",
+            "Pojechać do Energylandii",
+            "Pojechać autobusem na długi trip",
+            "Pojechać na basen z Bestii",
+            "Zrobić bukiet",
+            "Noc horrorów",
+            "Zjeść to, co nie lubimy",
+            "Nocny spacer",
+            "Skok do basenu w ubraniach",
+            "Cały dzień w niedopasowanym outficie",
+            "Zachód słońca na łące",
+            "Zróbcie piknik",
+            "Cały dzień mówisz szeptem",
+            "Zróbcie własną imprezę",
+            "Cały dzień na tratwie w basenie",
+            "Powspinajcie się w lesie",
+            "Jechać na rowerze w lesie",
+            "Wykopcie największą dziurę",
+            "Wyjść w karykaturalnym makeup",
+            "Zabierzcie orzeszka na trip (rowerem lub na pieszo w transporterze)",
+            "Wymieńcie się ubraniami na dzień",
+            "Bitwa na mąkę",
+            "Wejdźcie w nocy do basenu",
+            "Napiszcie własną piosenkę wakacyjną i ją zaśpiewajcie",
+            "Cały dzień rozmawiajcie tylko w rymach",
+            "Ugotujcie deser z trzech losowych składników z kuchni",
+            "Cały dzień udajcie, że mówicie w obcym, wymyślonym języku",
+            "Napiszcie list do przyszłego siebie i zakopcie go w ogródku",
+            "Napiszcie krótką historię o tym, jak zostaliście piratami",
+            "Wykonajcie wspólne zdjęcie w najbardziej zwariowanym stylu",
+            "Zorganizujcie poszukiwania skarbów w domu lub na podwórku",
+            "Stwórzcie komiks z życia waszej ekipy",
+            "Zróbcie najbardziej absurdalne smoothie z dostępnych owoców i warzyw",
+            "Zorganizujcie konkurs na najlepszy okrzyk bojowy",
+            "Zjedzcie na śniadanie coś, czego nigdy wcześniej nie próbowaliście",
+            "Napiszcie razem wiersz, ale każdy dopisuje tylko jedno słowo",
+            "Zorganizujcie quiz o sobie nawzajem",
+            "Stwórzcie własną wersję reklamy dziwnego produktu (np. kamienia do rzucania)",
+            "Przesiedźcie 10 minut nieruchomo jak posągi w lesie",
+            "Przez godzinę nie mówić ani słowa",
+            "Zróbcie matching koszulki",
+            "Idźcie na pieszo do Czechowic i wróćcie tą samą drogą",
+            "Pozbierajcie ładne kamyczki min.15 i zróbcie ich zdjęcia",
+            "Zatańczcie w deszczu i zróbcie zdjęcia",
+            "Oglądajcie razem burzę",
+            "Sesja aparatami",
+            "Kąpiel na Czechowicach",
+            "Idźcie na imprezę do flamingo",
+            "Pojedźcie na pizzę same",
+            "Pojedźcie do Gliwic same",
+            "Odwiedźcie sklep Flying Tiger",
+            "Pojedźcie do foto budki",
+            "Obejrzyjcie film na tablecie na dworze",
+            "Pomalujcie kamienie i zostawcie je w różnych miejscach",
+            "Pójdźcie do biblioteki i wypożyczcie książki",
+            "Rozłóżcie namiot w lesie i posiedźcie tam oglądając film/czytając książkę",
+            "Pojedźcie na rollercostery na dzień Pyskowic",
+            "Zróbcie zdjęcia w wodzie i pod wodą",
+            "Zróbcie slime",
+            "Z rzeczy pozostałych z wyzwań stwórzcie karton wspomnień wakacyjnych 2025",
+            "Zróbcie swój ogródek i zróbcie zdjęcie 1 dnia i ostatniego",
+            "Zróbcie bransoletki",
+            "Idźcie do kina",
+            "Nagrajcie vloga z całego dnia",
+            "Losowanie kolejności make-up",
+            "Wykorzystać wszystkie bony",
+            "Zrobić szklane pojemniczki z piaskiem i wodą i kamyczkami",
+            "Nagrać film",
+            "Zaróbcie własne pieniądze",
+            "Spotkajcie sławną osobę"
+        ];
+        
+        // Stan aplikacji
+        let appState = {
+            completed: [],
+            completionDates: {}
+        };
+        
+        // Załaduj stan z localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('wyzwania-2025');
+            if (savedState) {
+                appState = JSON.parse(savedState);
+            }
+            updateUI();
+        }
+        
+        // Zapisz stan do localStorage
+        function saveState() {
+            localStorage.setItem('wyzwania-2025', JSON.stringify(appState));
+        }
+        
+        // Aktualizuj UI
+        function updateUI() {
+            const completedCount = appState.completed.length;
+            const remainingCount = 100 - completedCount;
+            const percent = Math.round((completedCount / 100) * 100);
+            
+            document.getElementById('completed-count').textContent = completedCount;
+            document.getElementById('remaining-count').textContent = remainingCount;
+            document.getElementById('percent-complete').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = `${completedCount}/100`;
+            
+            renderChallenges();
+            
+            // Konfetti przy 100%
+            if (completedCount === 100 && !document.querySelector('.confetti')) {
+                celebrate();
+            }
+        }
+        
+        // Renderuj wyzwania
+        function renderChallenges() {
+            const grid = document.getElementById('challenges-grid');
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            
+            grid.innerHTML = '';
+            
+            challenges.forEach((challenge, index) => {
+                const challengeNum = index + 1;
+                const isCompleted = appState.completed.includes(challengeNum);
+                const completionDate = appState.completionDates[challengeNum];
+                
+                // Filtrowanie
+                if (activeFilter === 'completed' && !isCompleted) return;
+                if (activeFilter === 'remaining' && isCompleted) return;
+                if (searchTerm && !challenge.toLowerCase().includes(searchTerm)) return;
+                
+                const div = document.createElement('div');
+                div.className = `challenge-item ${isCompleted ? 'completed' : ''}`;
+                div.innerHTML = `
+                    <span class="challenge-number">#${challengeNum}</span>
+                    <div class="challenge-text">${challenge}</div>
+                    ${completionDate ? `<span class="challenge-date">Ukończono: ${new Date(completionDate).toLocaleDateString('pl-PL')}</span>` : ''}
+                `;
+                
+                div.addEventListener('click', () => toggleChallenge(challengeNum));
+                grid.appendChild(div);
+            });
+        }
+        
+        // Przełącz stan wyzwania
+        function toggleChallenge(challengeNum) {
+            const index = appState.completed.indexOf(challengeNum);
+            
+            if (index === -1) {
+                // Oznacz jako ukończone
+                appState.completed.push(challengeNum);
+                appState.completionDates[challengeNum] = new Date().toISOString();
+            } else {
+                // Odznacz
+                appState.completed.splice(index, 1);
+                delete appState.completionDates[challengeNum];
+            }
+            
+            saveState();
+            updateUI();
+        }
+        
+        // Filtry
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderChallenges();
+            });
+        });
+        
+        // Wyszukiwarka
+        document.getElementById('search').addEventListener('input', renderChallenges);
+        
+        // Eksport danych
+        function exportData() {
+            const dataStr = JSON.stringify(appState, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `wyzwania-2025-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+        
+        // Import danych
+        function importData() {
+            document.getElementById('import-input').click();
+        }
+        
+        document.getElementById('import-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        appState = JSON.parse(e.target.result);
+                        saveState();
+                        updateUI();
+                        alert('Postępy zostały zaimportowane!');
+                    } catch (err) {
+                        alert('Błąd podczas importowania pliku!');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+        
+        // Reset
+        function showResetModal() {
+            document.getElementById('reset-modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('reset-modal').classList.remove('active');
+        }
+        
+        function resetProgress() {
+            appState = { completed: [], completionDates: {} };
+            saveState();
+            updateUI();
+            closeModal();
+        }
+        
+        // Celebracja
+        function celebrate() {
+            const colors = ['#667eea', '#764ba2', '#ff6b6b', '#4ecdc4', '#ffe66d'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+        
+        // Inicjalizacja
+        loadState();
+    </script>
+</body>
+</html>
